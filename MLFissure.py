@@ -36,7 +36,16 @@ df = pd.concat([positive_df, negative_df], axis=0).sample(frac=1.0, random_state
 
 train_df,test_df = train_test_split(df.sample(20000,random_state=98),train_size=0.7,shuffle=True,random_state=89)
 
-train_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255,validation_split=0.2) #Création d'une liste d'image train
+train_gen = tf.keras.preprocessing.image.ImageDataGenerator(
+    rescale=1./255,
+    validation_split=0.2,
+    rotation_range=20,  # Randomly rotate images in the range (degrees, 0 to 180)
+    zoom_range=0.1,  # Randomly zoom image 
+    width_shift_range=0.1,  # Randomly shift images horizontally (fraction of total width)
+    height_shift_range=0.1,  # Randomly shift images vertically (fraction of total height)
+    horizontal_flip=True,  # Randomly flip images horizontally
+    vertical_flip=False  # Randomly flip images vertically
+) #Création d'une liste d'image train
 
 test_gen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255) #Créationd d'une liste d'image pour le test
 
@@ -113,8 +122,8 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=5,
-    verbose=0,
+    patience=10,
+    verbose=1,
     mode='min',
     restore_best_weights=True
 )
@@ -123,5 +132,5 @@ history = model.fit(train_data, validation_data=val_data, epochs=20, callbacks=[
 print(history)
 
 
-model.save("my_modelUPDATE.h5")
+model.save("my_modelAUGMENTEDlast10nov.h5")
 

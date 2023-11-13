@@ -1,4 +1,3 @@
-import streamlit as st 
+import tensorflow as tf
 
-
-st.title('Welcome to the site')
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
